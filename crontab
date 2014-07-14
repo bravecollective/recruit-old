@@ -1,0 +1,5 @@
+# Update application list every 30 minutes
+03,33   *       *       *       *       cd /path/to/bravecollective-recruit/gen_data; ./recruiting.py <keyid> <vcode>
+
+# Update alliance list every 24 hours
+46   23       *       *       *         cd /path/tos/bravecollective-recruit/gen_data; ./alliance.py
