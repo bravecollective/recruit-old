@@ -80,7 +80,7 @@ function authVerify() {
     $charName = $result->character->name;
     $tags = $result->tags;
 
-    if (!in_array("bni.recruiters", $tags)) {
+    if (!in_array("alliance.corporation.bni.recruiters", $tags)) {
 	authStatic("auth/tpl_auth_needed.php");
 	return;
     }
