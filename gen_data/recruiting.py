@@ -12,12 +12,16 @@ import MySQLdb
 
 online = True
 
+headers = {
+    'User-Agent': 'BRAVE kiu Nakamura kiu@gmx.net'
+}
+
 if (len(sys.argv) != 3):
     print sys.argv[0] + " <keyID> <vCode>"
     sys.exit(1)
 
-api_keyid = sys.argv[1]
-api_vcode = sys.argv[2]
+api_keyid = str(sys.argv[1])
+api_vcode = str(sys.argv[2])
 
 # ---------------------------------------------
 
@@ -32,8 +36,9 @@ corpAdded = []
 
 def retrieveNotifications():
     if (online):
-	req = requests.get('https://api.eveonline.com/char/Notifications.xml.aspx?keyID=' + api_keyid + "&vCode=" + api_vcode)
+	req = requests.get('https://api.eveonline.com/char/Notifications.xml.aspx?keyID=' + api_keyid + "&vCode=" + api_vcode, headers=headers)
 	root = etree.fromstring(req.text.encode("utf-8"))
+	time.sleep(1)
     else:
 	root = etree.parse(open('Notifications.xml.aspx','r'))
 
@@ -65,8 +70,9 @@ def retrieveNotificationDetails(nIds):
     global api_keyid, api_vcode, db, cur
 
     if (online):
-	req = requests.get('https://api.eveonline.com/char/NotificationTexts.xml.aspx?keyID=' + api_keyid + "&vCode=" + api_vcode + "&IDs=" + ",".join(nIds))
+	req = requests.get('https://api.eveonline.com/char/NotificationTexts.xml.aspx?keyID=' + api_keyid + "&vCode=" + api_vcode + "&IDs=" + ",".join(nIds), headers=headers)
 	root = etree.fromstring(req.text.encode("utf-8"))
+	time.sleep(1)
     else:
 	root = etree.parse(open('NotificationTexts.xml.aspx','r'))
 
@@ -109,8 +115,9 @@ def retrieveEmploymentHistory(cIds):
     cIds = list(set(cIds))
     for charId in cIds:
 	if (online):
-	    req = requests.get('https://api.eveonline.com/EVE/CharacterInfo.xml.aspx?characterID=' + charId)
+	    req = requests.get('https://api.eveonline.com/EVE/CharacterInfo.xml.aspx?characterID=' + charId, headers=headers)
 	    root = etree.fromstring(req.text.encode("utf-8"))
+	    time.sleep(1)
 	else:
 	    root = etree.parse(open('NotificationTexts.xml.aspx?characterID=' + charId,'r'))
 
@@ -135,8 +142,9 @@ def retrieveCorporation(cIds):
     cIds = list(set(cIds))
     for corpId in cIds:
 	if (online):
-	    req = requests.get('https://api.eveonline.com/corp/CorporationSheet.xml.aspx?corporationID=' + str(corpId))
+	    req = requests.get('https://api.eveonline.com/corp/CorporationSheet.xml.aspx?corporationID=' + str(corpId), headers=headers)
 	    root = etree.fromstring(req.text.encode("utf-8"))
+	    time.sleep(1)
 	else:
 	    root = etree.parse(open('CorporationSheet.xml.aspx?characterID=' + str(corpId),'r'))
 
@@ -164,4 +172,3 @@ if charIdAdded:
 
 if corpAdded:
     retrieveCorporation(corpAdded)
-
